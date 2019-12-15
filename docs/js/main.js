@@ -22,7 +22,7 @@ var imgs = [
     'img/bins.png'
 ]
 var professors = []
-var professorVelocity = 0.02
+var professorVelocity = 0.015
 var edges = {}
 var rotateDirection = {
     'left': 1,
@@ -45,6 +45,7 @@ function loadProfessor() {
     var professor = {}
     var geometry = new THREE.CircleGeometry(0.25, 32)
     professor.shape = new THREE.Mesh(geometry, material)
+    professor.shape.rotateZ(Math.random() * (0, 2) * Math.PI);
     scene.add(professor.shape)
     professors.push(professor)
 }
