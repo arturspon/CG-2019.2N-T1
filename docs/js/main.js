@@ -18,8 +18,24 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 })
 
+var imgs = [
+    'img/bins.png'
+]
+
 function initScreenSaver() {
+    loadProfessor()
     render()
+}
+
+function loadProfessor() {
+    var texture = new THREE.TextureLoader().load(imgs[0]);
+    var material = new THREE.MeshBasicMaterial();
+    material.map = texture;
+
+    var professor = {}
+    var geometry = new THREE.CircleGeometry(0.25, 32);
+    professor.shape = new THREE.Mesh(geometry, material);
+    scene.add(professor.shape);
 }
 
 function render() {
