@@ -125,10 +125,8 @@ function checkEdgeCollisions(obj) {
 
 function checkProfessorCollisions(obj) {
     for (professor of professors) {
-        if (obj !== professor.shape && detectCollisionCubes(obj, professor.shape)) {
-            // scene.remove(professor.shape)
-            // professors.remove(professor)
-            // delete professors[professor]
+        if (professor && obj !== professor.shape && detectCollisionCubes(obj, professor.shape)) {
+            removeProfessor(professor)
             explode(obj.position.x, obj.position.y)
         }        
     }
@@ -157,6 +155,13 @@ function explode(x, y) {
     }
 }
 
+function removeProfessor(professor) {
+    scene.remove(professor.shape)
+    var professorIndex = professors.indexOf(professor)
+    delete professors[professorIndex]
+    professorsOnScreen--
+}
+
 function render() {
     requestAnimationFrame(render)
 
@@ -168,9 +173,11 @@ function render() {
     renderer.render(scene, camera)
 
     for (professor of professors) {
-        professor.shape.translateX(professor.velocity)
-        checkEdgeCollisions(professor.shape)
-        checkProfessorCollisions(professor.shape)
+        if(professor){
+            professor.shape.translateX(professor.velocity)
+            checkEdgeCollisions(professor.shape)
+            checkProfessorCollisions(professor.shape)
+        }
     }
 }
 
