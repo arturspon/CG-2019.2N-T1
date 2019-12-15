@@ -18,8 +18,14 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix()
 })
 
-var imgs = [
-    'img/bins.png'
+var professorImages = [
+    'img/bins.png',
+    'img/braulio.png',
+    'img/denio.png',
+    'img/emilio.png',
+    'img/fernando.png',
+    'img/guilherme.png',
+    'img/marco.png',
 ]
 var professors = []
 var professorVelocity = 0.015
@@ -30,15 +36,27 @@ var rotateDirection = {
     'right': 1,
     'bottom': 0
 }
+var professorsOnScreen = 0
+var maxProfessorsOnScreen = 10
 
 function initScreenSaver() {
-    loadProfessor()
+    generateProfessors()
     addBouncingEdges()
     render()
 }
 
+function generateProfessors() {
+    setInterval(function(){
+        if (professorsOnScreen < maxProfessorsOnScreen) {
+            loadProfessor()
+        }
+    }, 3000);
+}
+
 function loadProfessor() {
-    var texture = new THREE.TextureLoader().load(imgs[0])
+    var professorImg = professorImages[Math.floor(Math.random() * professorImages.length)]
+
+    var texture = new THREE.TextureLoader().load(professorImg)
     var material = new THREE.MeshBasicMaterial()
     material.map = texture
 
@@ -48,6 +66,8 @@ function loadProfessor() {
     professor.shape.rotateZ(Math.random() * (0, 2) * Math.PI);
     scene.add(professor.shape)
     professors.push(professor)
+
+    professorsOnScreen++
 }
 
 function addBouncingEdges() {
