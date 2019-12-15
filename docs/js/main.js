@@ -28,7 +28,7 @@ var professorImages = [
     'img/marco.png',
 ]
 var professors = []
-var professorVelocity = 5
+var professorVelocity = 3
 var edges = {}
 var rotateDirection = {
     'left': 1,
@@ -38,6 +38,7 @@ var rotateDirection = {
 }
 var professorsOnScreen = 0
 var maxProfessorsOnScreen = 10
+var canExplode = true
 
 function initScreenSaver() {
     generateProfessors()
@@ -50,7 +51,7 @@ function generateProfessors() {
         if (professorsOnScreen < maxProfessorsOnScreen) {
             loadProfessor()
         }
-    }, 1000);
+    }, 1000)
 }
 
 function loadProfessor() {
@@ -63,7 +64,7 @@ function loadProfessor() {
     var professor = {}
     var geometry = new THREE.CircleGeometry(50)
     professor.shape = new THREE.Mesh(geometry, material)
-    professor.shape.rotateZ(Math.random() * (0, 2) * Math.PI);
+    professor.shape.rotateZ(Math.random() * (0, 2) * Math.PI)
     scene.add(professor.shape)
     professors.push(professor)
 
@@ -119,12 +120,46 @@ function checkEdgeCollisions(obj) {
     }
 }
 
+function checkProfessorCollisions(obj) {
+    for (professor of professors) {
+        if (obj !== professor.shape && detectCollisionCubes(obj, professor.shape)) {
+            // scene.remove(professor.shape)
+            // professors.remove(professor)
+            // delete professors[professor]
+            explode(obj.position.x, obj.position.y)
+        }        
+    }
+}
+
+function detectCollisionCubes(object1, object2){
+    object1.geometry.computeBoundingBox()
+    object2.geometry.computeBoundingBox()
+    object1.updateMatrixWorld()
+    object2.updateMatrixWorld()
+
+    var box1 = object1.geometry.boundingBox.clone()
+    box1.applyMatrix4(object1.matrixWorld)
+
+    var box2 = object2.geometry.boundingBox.clone()
+    box2.applyMatrix4(object2.matrixWorld)
+
+    return box1.intersectsBox(box2)
+}
+
+function explode(x, y) {
+    if (canExplode) {
+        canExplode = false
+        parts.push(new ExplodeAnimation(x, y))
+        setTimeout(function(){ canExplode = true }, 1000)
+    }
+}
+
 function render() {
     requestAnimationFrame(render)
 
-    var pCount = parts.length;
+    var pCount = parts.length
     while(pCount--) {
-        parts[pCount].update();
+        parts[pCount].update()
     }
 
     renderer.render(scene, camera)
@@ -132,6 +167,7 @@ function render() {
     for (professor of professors) {
         professor.shape.translateX(professorVelocity)
         checkEdgeCollisions(professor.shape)
+        checkProfessorCollisions(professor.shape)
     }
 }
 
