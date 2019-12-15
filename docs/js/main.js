@@ -1,13 +1,13 @@
 var scene = new THREE.Scene()
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-camera.position.z = 3
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000)
+camera.position.z = 1000
 
 var renderer = new THREE.WebGLRenderer()
 renderer.setClearColor(0x000000)
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
-var light = new THREE.PointLight(0xFFFFFF, 1, 1000)
+var light = new THREE.PointLight(0xFFFFFF, 1, 10000)
 light.position.set(0, 0, 0)
 scene.add(light)
 
@@ -28,7 +28,7 @@ var professorImages = [
     'img/marco.png',
 ]
 var professors = []
-var professorVelocity = 0.015
+var professorVelocity = 5
 var edges = {}
 var rotateDirection = {
     'left': 1,
@@ -50,7 +50,7 @@ function generateProfessors() {
         if (professorsOnScreen < maxProfessorsOnScreen) {
             loadProfessor()
         }
-    }, 3000);
+    }, 1000);
 }
 
 function loadProfessor() {
@@ -61,7 +61,7 @@ function loadProfessor() {
     material.map = texture
 
     var professor = {}
-    var geometry = new THREE.CircleGeometry(0.25, 32)
+    var geometry = new THREE.CircleGeometry(50)
     professor.shape = new THREE.Mesh(geometry, material)
     professor.shape.rotateZ(Math.random() * (0, 2) * Math.PI);
     scene.add(professor.shape)
@@ -71,7 +71,11 @@ function loadProfessor() {
 }
 
 function addBouncingEdges() {
-    var geometry = new THREE.BoxGeometry(1.5, 5, 1)
+    var vFOV = THREE.Math.degToRad(camera.fov);   // convert vertical fov to radians
+    var height = 2 * Math.tan( vFOV / 2 ) * 999;    // visible height
+    var width = height * camera.aspect;             // visible width
+
+    var geometry = new THREE.BoxGeometry(width, height, 1)
     var material = new THREE.MeshBasicMaterial({ depthWrite: false, depthTest: false })
 
     var rightCube = new THREE.Mesh(geometry, material)
@@ -80,7 +84,7 @@ function addBouncingEdges() {
     var leftCube = new THREE.Mesh(geometry, material)
     leftCube.position.set(-4.5, 0, 0.5)
 
-    geometry = new THREE.BoxGeometry(9, 1.5, 1)
+    geometry = new THREE.BoxGeometry(width, height, 1)
 
     var topCube = new THREE.Mesh(geometry, material)
     topCube.position.set(0, 2.5, 0.5)
