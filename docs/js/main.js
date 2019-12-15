@@ -28,7 +28,6 @@ var professorImages = [
     'img/marco.png',
 ]
 var professors = []
-var professorVelocity = 3
 var edges = {}
 var rotateDirection = {
     'left': 1,
@@ -62,10 +61,14 @@ function loadProfessor() {
     material.map = texture
 
     var professor = {}
-    var geometry = new THREE.CircleGeometry(50)
+    var geometry = new THREE.CircleGeometry(Math.floor(Math.random() * 52) + 44)
+
     professor.shape = new THREE.Mesh(geometry, material)
     professor.shape.rotateZ(Math.random() * (0, 2) * Math.PI)
+    professor.velocity = Math.floor(Math.random() * 4) + 1
+
     scene.add(professor.shape)
+
     professors.push(professor)
 
     professorsOnScreen++
@@ -165,7 +168,7 @@ function render() {
     renderer.render(scene, camera)
 
     for (professor of professors) {
-        professor.shape.translateX(professorVelocity)
+        professor.shape.translateX(professor.velocity)
         checkEdgeCollisions(professor.shape)
         checkProfessorCollisions(professor.shape)
     }
