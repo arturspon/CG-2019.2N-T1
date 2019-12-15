@@ -121,6 +121,12 @@ function checkEdgeCollisions(obj) {
 
 function render() {
     requestAnimationFrame(render)
+
+    var pCount = parts.length;
+    while(pCount--) {
+        parts[pCount].update();
+    }
+
     renderer.render(scene, camera)
 
     for (professor of professors) {
