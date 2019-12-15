@@ -23,7 +23,13 @@ var imgs = [
 ]
 var professors = []
 var professorVelocity = 0.02
-var edges = []
+var edges = {}
+var rotateDirection = {
+    'left': 1,
+    'top': 0,
+    'right': 1,
+    'bottom': 0
+}
 
 function initScreenSaver() {
     loadProfessor()
@@ -61,12 +67,10 @@ function addBouncingEdges() {
     var bottomCube = new THREE.Mesh(geometry, material)
     bottomCube.position.set(0, -2.5, 0.5)
 
-    edges.push(
-        rightCube,
-        leftCube,
-        topCube,
-        bottomCube
-    )
+    edges['left'] = leftCube
+    edges['top'] = topCube
+    edges['right'] = rightCube
+    edges['bottom'] = bottomCube
 }
 
 function isColliding (firstObject, secondObject) {
@@ -81,11 +85,11 @@ function rotateObject(obj, amount) {
 }
 
 function checkEdgeCollisions(obj) {
-    for (edge of edges) {
-        if (isColliding(obj, edge)) {
-            rotateObject(obj, Math.floor(Math.random() * 2))
-
-            console.log('colidindo')
+    for (key in edges) {
+        if (edges.hasOwnProperty(key)) {
+            if (isColliding(obj, edges[key])) {
+                rotateObject(obj, rotateDirection[key])
+            }
         }
     }
 }
