@@ -75,7 +75,7 @@ function loadProfessor() {
 }
 
 function addBouncingEdges() {
-    var vFOV = THREE.Math.degToRad(camera.fov);   // convert vertical fov to radians
+    var vFOV = THREE.Math.degToRad(camera.fov);     // convert vertical fov to radians
     var height = 2 * Math.tan( vFOV / 2 ) * 999;    // visible height
     var width = height * camera.aspect;             // visible width
 
@@ -128,6 +128,8 @@ function checkProfessorCollisions(obj) {
         if (professor && obj !== professor.shape && detectCollisionCubes(obj, professor.shape)) {
             removeProfessor(professor)
             explode(obj.position.x, obj.position.y)
+            obj.scale.x += 1
+            obj.scale.y += 1
         }        
     }
 }
