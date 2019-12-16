@@ -51,6 +51,9 @@ function generateProfessors() {
             loadProfessor()
         }
     }, 1000)
+    setInterval(function(){
+        professorsOnScreen = 0
+    }, 20000)
 }
 
 function loadProfessor() {

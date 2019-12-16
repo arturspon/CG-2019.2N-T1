@@ -2,8 +2,8 @@
 
 //////////////settings/////////
 var movementSpeed = 20;
-var totalObjects = 200;
-var objectSize = 6;
+var totalObjects = 1000;
+var objectSize = 8;
 var sizeRandomness = 1000;
 var colors = [0xFF0FFF, 0xCCFF00, 0xFF000F, 0x996600, 0xFFFFFF];
 /////////////////////////////////
